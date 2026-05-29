@@ -24,7 +24,7 @@ body::after{content:"";position:fixed;inset:0;background:repeating-linear-gradie
 /* APP */
 #app{display:flex;flex-direction:column;height:100dvh;height:100vh;position:relative;z-index:1}
 /* HEADER */
-#hdr{height:var(--hh);min-height:var(--hh);flex-shrink:0;display:flex;align-items:center;gap:7px;padding:0 10px;background:rgba(6,13,26,.98);border-bottom:1px solid var(--b1);z-index:500;box-shadow:0 2px 24px rgba(0,0,0,.5)}
+#hdr{height:auto;min-height:var(--hh);flex-shrink:0;display:flex;align-items:center;gap:7px;padding:6px 10px;background:rgba(6,13,26,0.98);border-bottom:1px solid var(--b1);z-index:500;box-shadow:0 2px 24px rgba(0,0,0,0.5);flex-wrap:wrap}
 .logo-ico{width:30px;height:30px;min-width:30px;background:linear-gradient(135deg,var(--c1),#0055cc);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:var(--f2);font-size:13px;font-weight:900;color:#fff;box-shadow:var(--g1);flex-shrink:0}
 .lt1{font-family:var(--f2);font-size:11px;font-weight:700;color:#fff;line-height:1.1;white-space:nowrap}
 .lt2{font-family:var(--f3);font-size:6.5px;color:var(--t3);white-space:nowrap}
@@ -132,7 +132,7 @@ select.inp option{background:var(--s2)}
 .tr{display:flex;align-items:center;gap:7px;margin-bottom:5px}
 .tl{font-size:9.5px;color:var(--t2);flex:1}
 /* STATUS BAR */
-#sb{height:var(--sbh);min-height:var(--sbh);flex-shrink:0;display:flex;align-items:center;background:rgba(6,13,26,.99);border-top:1px solid var(--b1);padding:0 10px;font-family:var(--f3);overflow:hidden}
+#sb{height:auto;min-height:var(--sbh);flex-shrink:0;display:flex;align-items:center;background:rgba(6,13,26,0.99);border-top:1px solid var(--b1);padding:4px 10px;font-family:var(--f3);overflow-x:auto;flex-wrap:wrap}
 .si{display:flex;flex-direction:column;padding:0 8px;border-left:1px solid rgba(21,36,64,.6)}
 .sl{font-size:6.5px;color:var(--t4);text-transform:uppercase;letter-spacing:.4px}
 .sv{color:var(--c1);font-weight:600;font-size:10px}.sv.ok{color:var(--c3)}.sv.warn{color:var(--c4)}.sv.err{color:var(--c5)}
@@ -140,7 +140,7 @@ select.inp option{background:var(--s2)}
 #vp{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--bg);overflow:hidden}
 .vph{flex:1;min-height:0;position:relative;overflow:hidden}
 /* CONTROL BAR — ALWAYS VISIBLE */
-#ctrlBar{flex-shrink:0;height:var(--cbh);min-height:var(--cbh);max-height:var(--cbh);background:rgba(6,13,26,.98);border-top:2px solid rgba(0,229,255,.3);display:flex;align-items:center;justify-content:center;gap:5px;padding:0 8px;overflow-x:auto;position:relative;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,.5)}
+#ctrlBar{flex-shrink:0;height:auto;min-height:var(--cbh);background:rgba(6,13,26,0.98);border-top:2px solid rgba(0,229,255,0.3);display:flex;align-items:center;justify-content:center;gap:5px;padding:8px;overflow-x:auto;position:relative;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.5);flex-wrap:wrap}
 #ctrlBar::-webkit-scrollbar{height:2px}
 #ctrlBar::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c1),var(--c3),var(--c4),transparent)}
 .vsw{position:absolute;top:7px;left:50%;transform:translateX(-50%);display:flex;gap:2px;background:rgba(6,13,26,.95);padding:3px;border-radius:7px;border:1px solid var(--b1);z-index:20}
@@ -663,7 +663,14 @@ select.inp option{background:var(--s2)}
   <div class="card">
     <div class="ch">⚡ الأقطاب</div>
     <div class="cb">
-      <div class="fr"><label>🔢 عدد الأقطاب</label><input class="inp" type="number" id="nbE" value="32" min="4" max="96" onchange="buildGrid();calcSeq();updStake()"/></div>
+      <div class="fr"><label>🔢 عدد الأقطاب</label>
+        <div style="display:flex;gap:4px;margin-bottom:4px">
+          <button class="btn bgh bxs" onclick="setElectrodes(16)">16</button>
+          <button class="btn bgh bxs" onclick="setElectrodes(32)">32</button>
+          <button class="btn bgh bxs" onclick="setElectrodes(64)">64</button>
+        </div>
+        <input class="inp" type="number" id="nbE" value="32" min="4" max="96" onchange="buildGrid();calcSeq();updStake()"/>
+      </div>
       <div class="ir">
         <div class="fr" style="margin:0"><label>🟢 السيخ الأول A1</label><input class="inp" type="number" id="e1v" value="1" min="1" onchange="updStake()"/></div>
         <div class="fr" style="margin:0"><label>🔴 السيخ الأخير AN</label><input class="inp" type="number" id="eNv" value="32" min="1" onchange="updStake()"/></div>
@@ -1092,7 +1099,33 @@ function generateSeq(){calcSeq();log(`📊 تسلسل: ${S.seq.length} قراء�
 function dlSeq(){if(!S.seq.length){log('⚠ لا تسلسل','warn');return;}dl('a b m n\n'+S.seq.map(r=>r.join(' ')).join('\n'),'sequence.txt','text/plain');}
 function dl(c,n,t){const a=document.createElement('a');a.href='data:'+t+';charset=utf-8,'+encodeURIComponent(c);a.download=n;a.click();}
 
-/* ERT SIMULATION */
+/* ERT SIMULATION & FILTERS */
+const FILT = {
+  butterworth: (data, fc, fs, order) => {
+    // Simple 1st order equivalent for demo
+    const rc = 1 / (2 * Math.PI * fc);
+    const dt = 1 / fs;
+    const alpha = dt / (rc + dt);
+    let filtered = [data[0]];
+    for (let i = 1; i < data.length; i++) {
+      filtered[i] = alpha * data[i] + (1 - alpha) * filtered[i - 1];
+    }
+    return filtered;
+  },
+  savGol: (data, windowSize) => {
+    const half = Math.floor(windowSize / 2);
+    let filtered = [];
+    for (let i = 0; i < data.length; i++) {
+      let sum = 0, count = 0;
+      for (let j = i - half; j <= i + half; j++) {
+        if (j >= 0 && j < data.length) { sum += data[j]; count++; }
+      }
+      filtered.push(sum / count);
+    }
+    return filtered;
+  }
+};
+
 function simRho(xm,zm){
   let rho=78+Math.random()*22;
   if(zm<-4)rho=115+Math.random()*35;if(zm<-14)rho=195+Math.random()*55;
@@ -1235,7 +1268,7 @@ function runRsCheck(){
 function initSigPlot(){
   const t=Array.from({length:200},(_,i)=>i*.5);
   const raw=t.map(x=>Math.sin(x*.3)*50+Math.random()*28+Math.sin(x*3.14)*6+Math.sin(x*100)*4);
-  const filt=raw.map((_,i,a)=>a.slice(Math.max(0,i-4),i+5).reduce((s,v)=>s+v,0)/Math.min(i+5,9));
+  const filt = FILT.butterworth(raw, 10, 200, 4);
   Plotly.react('sigPlt',[{x:t,y:raw,name:'📶 خام',type:'scatter',mode:'lines',line:{color:'rgba(255,109,0,.5)',width:1}},{x:t,y:filt,name:'✅ مفلتر',type:'scatter',mode:'lines',line:{color:'#00e5ff',width:2}}],
     {...DL,margin:{t:5,r:5,b:32,l:48},legend:{bgcolor:'transparent',font:{color:'#8bb8d4',size:8}},xaxis:{...DL.xaxis,title:'ms'},yaxis:{...DL.yaxis,title:'سعة'}},{responsive:true,displaylogo:false,displayModeBar:false});
 }
@@ -1251,7 +1284,18 @@ function runAI(){
   BURIED.forEach(obj=>{let cnt=0,rhoSum=0,ipSum=0;for(let i=0;i<df.app.length;i++){const xm=(Math.min(df.a[i],df.b[i],df.m[i],df.n[i])+Math.max(df.a[i],df.b[i],df.m[i],df.n[i]))/2*sp;if(Math.abs(xm-obj.x)<obj.rx*1.7){cnt++;rhoSum+=df.app[i];ipSum+=df.ip[i];}}
     if(cnt<1)return;const rm=rhoSum/cnt,im=ipSum/cnt;
     let conf=60;
-    if(obj.type==='metal'){ if(rm>tM && im>tI) conf=85+Math.random()*10; else conf=50+Math.random()*20; }
+    if(obj.type==='metal'){
+      if(rm>tM && im>tI) {
+        conf=92+Math.random()*6;
+        obj.label = '⚡ هدف معدني مؤكد (عالي IP)';
+        obj.info += '<br><span style="color:var(--c6)">تحليل IP: استجابة فلزية قوية</span>';
+      } else if (im > tI) {
+        conf=75+Math.random()*10;
+        obj.label = '⚡ هدف معدني محتمل (IP مرتفع)';
+      } else {
+        conf=40+Math.random()*20;
+      }
+    }
     else if(obj.type==='void'){ if(rm>tV) conf=80+Math.random()*15; else conf=45+Math.random()*25; }
     else if(obj.type==='burial'){ if(rm>800 && im>20) conf=75+Math.random()*15; else conf=50+Math.random()*20; }
     else if(obj.type==='jar'){ if(rm>300) conf=65+Math.random()*15; else conf=40+Math.random()*20; }
@@ -1298,8 +1342,8 @@ function rebuild3D(){
   const showWire=document.getElementById('togWire').classList.contains('on');
   const depCut=parseFloat(document.getElementById('depSl').value)||0;
   const traces=[],ys=4.5;
-  if(df&&df.app.length){const rxs=[],rys=[],rzs=[],rcs=[],rts=[];for(let i=0;i<df.app.length;i++){const mn=Math.min(df.a[i],df.b[i],df.m[i],df.n[i])*sp,mx=Math.max(df.a[i],df.b[i],df.m[i],df.n[i])*sp,d=mx-mn,xc=mn+d/2,zc=-Math.sqrt(2)/2*d;if(depCut>0&&Math.abs(zc+depCut)>3)continue;rxs.push(xc);rys.push(0);rzs.push(zc);rcs.push(df.app[i]);rts.push(`ρa=${df.app[i]}Ω·م | IP=${df.ip[i]}ms`);}
-    traces.push({type:'scatter3d',mode:'markers',name:'📊 البيانات',x:rxs,y:rys,z:rzs,marker:{size:4,color:rcs,colorscale:'Electric',showscale:true,colorbar:{title:'ρa (Ω·م)',x:1.02,thickness:10,tickfont:{color:'#8bb8d4',size:8}},opacity:.68},text:rts,hoverinfo:'text'});}
+  if(df&&df.app.length){const rxs=[],rys=[],rzs=[],rcs=[],rts=[],rsizes=[];for(let i=0;i<df.app.length;i++){const mn=Math.min(df.a[i],df.b[i],df.m[i],df.n[i])*sp,mx=Math.max(df.a[i],df.b[i],df.m[i],df.n[i])*sp,d=mx-mn,xc=mn+d/2,zc=-Math.sqrt(2)/2*d;if(depCut>0&&Math.abs(zc+depCut)>3)continue;rxs.push(xc);rys.push(0);rzs.push(zc);rcs.push(df.app[i]);rts.push(`ρa=${df.app[i]}Ω·م | IP=${df.ip[i]}ms`);rsizes.push(df.ip[i]>50?8:4);}
+    traces.push({type:'scatter3d',mode:'markers',name:'📊 البيانات',x:rxs,y:rys,z:rzs,marker:{size:rsizes,color:rcs,colorscale:getCS(),showscale:true,colorbar:{title:'ρa (Ω·م)',x:1.02,thickness:12,tickfont:{color:'#8bb8d4',size:9}},opacity:0.8,line:{color:'rgba(255,255,255,0.1)',width:0.5}},text:rts,hoverinfo:'text'});}
   const elX=Array.from({length:n},(_,i)=>i*sp);
   traces.push({type:'scatter3d',mode:'lines',name:'خط المقطع',showlegend:false,x:elX,y:Array(n).fill(0),z:Array(n).fill(.2),line:{color:'rgba(0,229,255,.65)',width:3},hoverinfo:'skip'});
   const ec=elX.map((_,i)=>i+1===e1?'#00e676':i+1===eN?'#ff1744':'rgba(0,229,255,.35)'),esz=elX.map((_,i)=>(i+1===e1||i+1===eN)?13:4);
@@ -1327,8 +1371,17 @@ function rebuild3D(){
   }
   traces.push({type:'scatter3d',mode:'text+markers',showlegend:false,x:Array.from({length:6},()=>-6),y:Array.from({length:6},()=>0),z:Array.from({length:6},(_,i)=>-i*5),text:Array.from({length:6},(_,i)=>`${i*5}م`),textfont:{color:'#4a7090',size:9},marker:{size:3,color:'rgba(74,112,144,.4)'},hoverinfo:'skip'});
   Plotly.react('plt3d',traces,{paper_bgcolor:'rgba(6,13,26,1)',
-    scene:{bgcolor:'rgba(6,13,26,1)',xaxis:{title:'X (م)',gridcolor:'#152440',color:'#4a7090',showbackground:true,backgroundcolor:'rgba(10,22,36,.85)',range:[-8,(n-1)*sp+8]},yaxis:{title:'Y (م)',gridcolor:'#152440',color:'#4a7090',showbackground:true,backgroundcolor:'rgba(10,22,36,.85)',range:[-6,6]},zaxis:{title:'العمق (م)',gridcolor:'#152440',color:'#4a7090',showbackground:true,backgroundcolor:'rgba(10,22,36,.85)',range:[-26,6]},camera:camSt,aspectmode:'manual',aspectratio:{x:3,y:.6,z:1.2},dragmode:'orbit'},
-    legend:{bgcolor:'rgba(10,22,36,.88)',bordercolor:'#152440',font:{color:'#8bb8d4',size:8},x:0,y:1},margin:{t:0,r:0,b:0,l:0},font:{color:'#8bb8d4',family:'JetBrains Mono'}},
+    legend:{bgcolor:'rgba(10,22,36,0.9)',bordercolor:'#152440',font:{color:'#8bb8d4',size:9},x:0,y:1},
+    margin:{t:0,r:0,b:0,l:0},font:{color:'#8bb8d4',family:'JetBrains Mono'},
+    scene:{
+      bgcolor:'rgba(6,13,26,1)',
+      camera:camSt,
+      aspectmode:'manual',
+      aspectratio:{x:3,y:0.6,z:1.2},
+      xaxis:{title:'X (م)',gridcolor:'#152440',color:'#4a7090',showbackground:true,backgroundcolor:'rgba(10,22,36,0.5)',range:[-8,(n-1)*sp+8]},
+      yaxis:{title:'Y (م)',gridcolor:'#152440',color:'#4a7090',showbackground:true,backgroundcolor:'rgba(10,22,36,0.5)',range:[-6,6]},
+      zaxis:{title:'العمق (م)',gridcolor:'#152440',color:'#4a7090',showbackground:true,backgroundcolor:'rgba(10,22,36,0.5)',range:[-26,6]}
+    }},
     {responsive:true,displaylogo:false,scrollZoom:true});
   const pd=document.getElementById('plt3d');
   if(pd&&pd.on){pd.on('plotly_relayout',d=>{if(d['scene.camera'])camSt=d['scene.camera'];});pd.on('plotly_click',ev=>{if(!ev.points||!ev.points.length)return;const nm=ev.points[0].data&&ev.points[0].data.name?ev.points[0].data.name:'';const b=BURIED.find(x=>nm===x.label);if(b){const box=document.getElementById('t3dBox');if(box){document.getElementById('t3dN').textContent=b.label;document.getElementById('t3dI').innerHTML=b.info||'—';box.style.display='block';}}});}
@@ -1439,6 +1492,11 @@ function updQR(){
 function applyCal(){S.calV=parseFloat(document.getElementById('calV').value)||0;S.calI=parseFloat(document.getElementById('calI').value)||0;S.calK=parseFloat(document.getElementById('calK').value)||1;log(`⊘ معايرة: V+${S.calV}mV I+${S.calI}mA K×${S.calK}`,'ok');}
 function resetCal(){['calV','calI','calK'].forEach((id,i)=>document.getElementById(id).value=['0.0','0.0','1.0'][i]);S.calV=0;S.calI=0;S.calK=1.0;log('🔄 تصفير المعايرة','ok');}
 function resetAll(){S.data={};setProg(0);log('⚠ إعادة ضبط كاملة','warn');}
+function setElectrodes(n){
+  const el=document.getElementById('nbE'); if(!el)return;
+  el.value=n; document.getElementById('eNv').value=n;
+  buildGrid();calcSeq();updStake();log(`⚙ تم ضبط النظام على ${n} قطب (OhmPi v2024)`,'ok');
+}
 
 /* PROJECTS */
 function saveProject(){
